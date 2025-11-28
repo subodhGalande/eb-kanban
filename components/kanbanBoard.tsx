@@ -19,6 +19,7 @@ import TaskCard from "./taskCard";
 import CreateTaskModal from "./createTaskModal";
 import Column from "./column";
 import { DragOverlay } from "@dnd-kit/core";
+import EditTaskModal from "./editTaskModal";
 
 type TaskStatus = "TODO" | "IN_PROGRESS" | "REVIEW" | "DONE";
 
@@ -36,6 +37,7 @@ interface KanbanBoardProps {
 export default function KanbanBoard({ tasks }: KanbanBoardProps) {
   const [taskList, setTaskList] = useState(tasks);
   const [activeTask, setActiveTask] = useState<Task | null>(null);
+  const [editTask, setEditTask] = useState<Task | null>(null);
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -110,6 +112,10 @@ export default function KanbanBoard({ tasks }: KanbanBoardProps) {
     setActiveTask(null);
   };
 
+  const handleEditSave = (updated: Task) => {
+    setTaskList((prev) => prev.map((t) => (t.id === updated.id ? updated : t)));
+  };
+
   const handleAddTask = (newTask: Task) => {
     setTaskList((prev) => [newTask, ...prev]);
   };
@@ -117,6 +123,14 @@ export default function KanbanBoard({ tasks }: KanbanBoardProps) {
   return (
     <div className="space-y-6">
       <CreateTaskModal onCreate={handleAddTask} />
+
+      {editTask && (
+        <EditTaskModal
+          task={editTask}
+          onClose={() => setEditTask(null)}
+          onSave={handleEditSave}
+        />
+      )}
 
       <DndContext
         sensors={sensors}
@@ -141,7 +155,11 @@ export default function KanbanBoard({ tasks }: KanbanBoardProps) {
                   )}
 
                   {columns[status].map((task) => (
-                    <TaskCard key={task.id} task={task} />
+                    <TaskCard
+                      key={task.id}
+                      task={task}
+                      onEdit={() => setEditTask(task)}
+                    />
                   ))}
                 </div>
               </SortableContext>
@@ -149,7 +167,7 @@ export default function KanbanBoard({ tasks }: KanbanBoardProps) {
           ))}
         </div>
         <DragOverlay>
-          {activeTask ? <TaskCard task={activeTask} /> : null}
+          {activeTask ? <TaskCard onEdit={() => {}} task={activeTask} /> : null}
         </DragOverlay>
       </DndContext>
     </div>
