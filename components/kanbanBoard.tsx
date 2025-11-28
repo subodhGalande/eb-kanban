@@ -20,6 +20,7 @@ import CreateTaskModal from "./createTaskModal";
 import Column from "./column";
 import { DragOverlay } from "@dnd-kit/core";
 import EditTaskModal from "./editTaskModal";
+import DeleteTaskModal from "./deleteTaskModal";
 
 type TaskStatus = "TODO" | "IN_PROGRESS" | "REVIEW" | "DONE";
 
@@ -38,6 +39,7 @@ export default function KanbanBoard({ tasks }: KanbanBoardProps) {
   const [taskList, setTaskList] = useState(tasks);
   const [activeTask, setActiveTask] = useState<Task | null>(null);
   const [editTask, setEditTask] = useState<Task | null>(null);
+  const [deleteTask, setDeleteTask] = useState<Task | null>(null);
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -120,6 +122,17 @@ export default function KanbanBoard({ tasks }: KanbanBoardProps) {
     setTaskList((prev) => [newTask, ...prev]);
   };
 
+  const handleDelete = async (task: Task) => {
+    try {
+      await axios.delete(`/api/tasks/${task.id}`);
+
+      setTaskList((prev) => prev.filter((t) => t.id !== task.id));
+      setDeleteTask(null);
+    } catch (e) {
+      console.error("Delete failed", e);
+    }
+  };
+
   return (
     <div className="space-y-6">
       <CreateTaskModal onCreate={handleAddTask} />
@@ -129,6 +142,14 @@ export default function KanbanBoard({ tasks }: KanbanBoardProps) {
           task={editTask}
           onClose={() => setEditTask(null)}
           onSave={handleEditSave}
+        />
+      )}
+
+      {deleteTask && (
+        <DeleteTaskModal
+          task={deleteTask}
+          onCancel={() => setDeleteTask(null)}
+          onConfirm={() => handleDelete(deleteTask)}
         />
       )}
 
@@ -159,6 +180,7 @@ export default function KanbanBoard({ tasks }: KanbanBoardProps) {
                       key={task.id}
                       task={task}
                       onEdit={() => setEditTask(task)}
+                      onDelete={() => setDeleteTask(task)}
                     />
                   ))}
                 </div>
@@ -167,7 +189,9 @@ export default function KanbanBoard({ tasks }: KanbanBoardProps) {
           ))}
         </div>
         <DragOverlay>
-          {activeTask ? <TaskCard onEdit={() => {}} task={activeTask} /> : null}
+          {activeTask ? (
+            <TaskCard onDelete={() => {}} onEdit={() => {}} task={activeTask} />
+          ) : null}
         </DragOverlay>
       </DndContext>
     </div>
