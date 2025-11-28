@@ -4,7 +4,7 @@ export default function DeleteTaskModal({ task, onConfirm, onCancel }) {
   if (!task) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/40 flex items-center justify-center">
+    <div className="fixed inset-0 bg-black/40 flex z-[9999] items-center justify-center">
       <div className="bg-white p-6 rounded w-[350px] shadow-lg space-y-4">
         <h2 className="text-lg font-semibold">Delete Task?</h2>
         <p className="text-sm text-gray-600">
