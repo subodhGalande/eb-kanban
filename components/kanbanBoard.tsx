@@ -187,7 +187,11 @@ export default function KanbanBoard({ tasks }: KanbanBoardProps) {
       {/* Toolbar */}
       <div className="flex justify-between mb-4 items-center rounded-lg">
         {/* Icons */}
-        <div className="flex items-center gap-3">
+
+        <div className="flex  gap-2 items-center">
+          <div className="text-primary font-sans font-medium hidden md:block text-nowrap bg-text/10 ring-1 ring-text/25 rounded-full text-xs px-1 ">
+            Client: Evergreen Enterprises, Fusion Networks Inc.
+          </div>
           {/* Filter */}
           <div className="relative hover:bg-text/25 rounded-sm duration-150 w-8 h-8 flex items-center justify-center">
             <ListFilter
@@ -240,7 +244,9 @@ export default function KanbanBoard({ tasks }: KanbanBoardProps) {
           />
         </div>
       </div>
-
+      <div className="text-primary font-sans w-fit  font-medium sm:hidden block text-nowrap bg-text/10 ring-1 ring-text/25 rounded-full text-xs px-1 mb-4 ">
+        Client: Evergreen Enterprises, Fusion Networks Inc.
+      </div>
       <DndContext
         sensors={sensors}
         collisionDetection={closestCenter}

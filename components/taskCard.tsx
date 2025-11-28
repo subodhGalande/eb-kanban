@@ -43,13 +43,13 @@ export default function TaskCard({ task, onEdit, onDelete }: any) {
         <div className="mt-2 mb-2">
           <div
             className={`
-            text-[10px] px-2 py-1 rounded font-medium
+            text-[10px] px-1 rounded font-medium
             ${
               task.priority === "HIGH"
-                ? "bg-danger/15 text-danger"
+                ? "bg-danger/15 ring-danger ring-1 text-danger"
                 : task.priority === "MEDIUM"
-                ? "bg-warning/15 text-warning "
-                : "bg-success/15 text-success "
+                ? "bg-warning/15 ring-1 ring-warning text-warning "
+                : "bg-success/15 ring-1 ring-success text-success "
             }
           `}
           >
