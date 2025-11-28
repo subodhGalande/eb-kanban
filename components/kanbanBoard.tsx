@@ -8,6 +8,8 @@ import {
   PointerSensor,
   useSensor,
   useSensors,
+  DragEndEvent,
+  DragStartEvent,
 } from "@dnd-kit/core";
 import {
   SortableContext,
@@ -57,28 +59,55 @@ export default function KanbanBoard({ tasks }: KanbanBoardProps) {
     DONE: "Done",
   };
 
-  const onDragStart = (event) => {
+  const onDragStart = (event: DragStartEvent) => {
     const id = event.active.id;
     const task = taskList.find((t) => t.id === id);
     setActiveTask(task || null);
   };
 
-  const onDragEnd = async ({ active, over }) => {
+  const onDragEnd = async (event: DragEndEvent) => {
+    const { active, over } = event;
+
     if (!over) return;
 
-    // Ensure dropped on a column, not a card
-    if (!["TODO", "IN_PROGRESS", "REVIEW", "DONE"].includes(over.id)) {
-      return;
+    const draggedId = active.id as string;
+
+    const draggedTask = taskList.find((t) => t.id === draggedId);
+    if (!draggedTask) return;
+
+    let newStatus: TaskStatus;
+
+    if (["TODO", "IN_PROGRESS", "REVIEW", "DONE"].includes(over.id as string)) {
+      newStatus = over.id as TaskStatus;
+    } else {
+      const targetTask = taskList.find((t) => t.id === over.id);
+      if (!targetTask) return;
+      newStatus = targetTask.status;
     }
 
-    const draggedId = active.id;
-    const newStatus = over.id as TaskStatus;
+    if (draggedTask.status === newStatus) {
+      setActiveTask(null);
+      return;
+    }
 
     setTaskList((prev) =>
       prev.map((t) => (t.id === draggedId ? { ...t, status: newStatus } : t))
     );
 
-    await axios.put(`/api/tasks/${draggedId}`, { status: newStatus });
+    console.log("Sending status:", newStatus);
+
+    try {
+      await axios.put(`/api/tasks/${draggedId}`, { status: newStatus });
+    } catch (error) {
+      console.error("Failed to update task:", error);
+      setTaskList((prev) =>
+        prev.map((t) =>
+          t.id === draggedId ? { ...t, status: draggedTask.status } : t
+        )
+      );
+    }
+
+    setActiveTask(null);
   };
 
   const handleAddTask = (newTask: Task) => {
