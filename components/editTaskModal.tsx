@@ -53,7 +53,6 @@ export default function EditTaskModal({ task, onClose, onSave }: any) {
         <h2 className="text-xl font-semibold mb-4">Edit Task</h2>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          {/* Title */}
           <div>
             <input
               {...register("title")}
@@ -65,7 +64,6 @@ export default function EditTaskModal({ task, onClose, onSave }: any) {
             )}
           </div>
 
-          {/* Description */}
           <div>
             <textarea
               {...register("description")}
@@ -79,7 +77,6 @@ export default function EditTaskModal({ task, onClose, onSave }: any) {
             )}
           </div>
 
-          {/* Priority */}
           <div>
             <select
               {...register("priority")}
@@ -92,7 +89,6 @@ export default function EditTaskModal({ task, onClose, onSave }: any) {
             </select>
           </div>
 
-          {/* Buttons */}
           <div className="flex justify-end gap-2">
             <button
               type="button"

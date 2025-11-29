@@ -48,6 +48,7 @@ export default function KanbanBoard({ tasks }: KanbanBoardProps) {
   const [filterStatus, setFilterStatus] = useState<"ALL" | TaskStatus>("ALL");
   const [sortBy, setSortBy] = useState<"NEW" | "OLD" | "AZ" | "ZA">("NEW");
 
+  //for filter, search and sort
   const visibleTasks = taskList
     .filter((t) => {
       const matchSearch =
@@ -119,7 +120,7 @@ export default function KanbanBoard({ tasks }: KanbanBoardProps) {
       return;
     }
 
-    // optimistic update
+    // optimistic update - for immediate ui updates
     setTaskList((prev) =>
       prev.map((t) => (t.id === draggedId ? { ...t, status: newStatus } : t))
     );
@@ -127,8 +128,7 @@ export default function KanbanBoard({ tasks }: KanbanBoardProps) {
     try {
       await axios.put(`/api/tasks/${draggedId}`, { status: newStatus });
     } catch (error) {
-      console.error("Failed to update task:", error);
-      // rollback
+      // rollback changes if error
       setTaskList((prev) =>
         prev.map((t) =>
           t.id === draggedId ? { ...t, status: draggedTask.status } : t
@@ -139,6 +139,7 @@ export default function KanbanBoard({ tasks }: KanbanBoardProps) {
     setActiveTask(null);
   };
 
+  //functions to handle edit, save and delete task
   const handleEditSave = (updated: Task) => {
     setTaskList((prev) => prev.map((t) => (t.id === updated.id ? updated : t)));
   };
@@ -159,7 +160,6 @@ export default function KanbanBoard({ tasks }: KanbanBoardProps) {
 
   return (
     <div className="font-sans w-full h-full">
-      {/* Header */}
       <div className="flex justify-between mb-2 items-center">
         <h1 className="text-lg sm:text-2xl text-heading font-semibold">
           Tasks
@@ -167,7 +167,7 @@ export default function KanbanBoard({ tasks }: KanbanBoardProps) {
         <CreateTaskModal onCreate={handleAddTask} />
       </div>
 
-      {/* Modals */}
+      {/* Edit task modal */}
       {editTask && (
         <EditTaskModal
           task={editTask}
@@ -175,7 +175,7 @@ export default function KanbanBoard({ tasks }: KanbanBoardProps) {
           onSave={handleEditSave}
         />
       )}
-
+      {/* Delete task modal */}
       {deleteTask && (
         <DeleteTaskModal
           task={deleteTask}
@@ -184,10 +184,8 @@ export default function KanbanBoard({ tasks }: KanbanBoardProps) {
         />
       )}
 
-      {/* Toolbar */}
+      {/* Toolbar for search, sort and filter */}
       <div className="flex justify-between mb-4 items-center rounded-lg">
-        {/* Icons */}
-
         <div className="flex  gap-2 items-center">
           <div className="text-primary font-sans font-medium hidden md:block text-nowrap bg-text/10 ring-1 ring-text/25 rounded-full text-xs px-1 ">
             Client: Evergreen Enterprises, Fusion Networks Inc.
@@ -247,13 +245,14 @@ export default function KanbanBoard({ tasks }: KanbanBoardProps) {
       <div className="text-primary font-sans w-fit  font-medium sm:hidden block text-nowrap bg-text/10 ring-1 ring-text/25 rounded-full text-xs px-1 mb-4 ">
         Client: Evergreen Enterprises, Fusion Networks Inc.
       </div>
+
+      {/* kanban columns */}
       <DndContext
         sensors={sensors}
         collisionDetection={closestCenter}
         onDragEnd={onDragEnd}
         onDragStart={onDragStart}
       >
-        {/* Responsive Columns */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 transition-all">
           {(Object.keys(columns) as TaskStatus[]).map((status) => (
             <Column key={status} id={status}>
@@ -286,7 +285,7 @@ export default function KanbanBoard({ tasks }: KanbanBoardProps) {
             </Column>
           ))}
         </div>
-
+        {/* drag overlay - for smooth card overlay animation */}
         <DragOverlay>
           {activeTask ? (
             <div className="scale-105 shadow-2xl">

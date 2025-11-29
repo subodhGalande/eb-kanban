@@ -1,7 +1,5 @@
 "use client";
 
-import LogoutButton from "./logoutButton";
-
 export default function UserMenu({
   name,
   avatarColor,

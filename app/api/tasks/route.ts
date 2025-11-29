@@ -2,8 +2,7 @@ import { NextResponse } from "next/server";
 import prisma from "@/lib/db";
 import { getUserId } from "@/lib/getUser";
 
-// --------------------------- CREATE TASK ---------------------------
-
+// Create task
 export async function POST(req: Request) {
   try {
     const userId = await getUserId();
@@ -12,11 +11,9 @@ export async function POST(req: Request) {
     }
 
     const body = await req.json();
-    console.log("📦 Received body:", body);
 
     const { title, description, priority } = body;
 
-    // Validate fields
     if (!title || !description) {
       return NextResponse.json(
         { message: "Title and description are required" },
@@ -24,12 +21,9 @@ export async function POST(req: Request) {
       );
     }
 
-    // Validate priority enum with default fallback
     const validPriorities = ["LOW", "MEDIUM", "HIGH"];
     const taskPriority =
       priority && validPriorities.includes(priority) ? priority : "MEDIUM";
-
-    console.log("✅ Creating task with priority:", taskPriority);
 
     const task = await prisma.task.create({
       data: {
@@ -41,15 +35,8 @@ export async function POST(req: Request) {
       },
     });
 
-    console.log("✅ Task created:", task);
-
     return NextResponse.json({ task }, { status: 201 });
   } catch (err: any) {
-    console.error("🔥 TASK CREATE ERROR:");
-    console.error("Error message:", err?.message);
-    console.error("Error stack:", err?.stack);
-    console.error("Full error:", err);
-
     return NextResponse.json(
       {
         message: "Server error",
@@ -60,8 +47,7 @@ export async function POST(req: Request) {
   }
 }
 
-// ----------------------------- GET TASKS -----------------------------
-
+// GET task
 export async function GET() {
   try {
     const userId = await getUserId();
@@ -83,7 +69,6 @@ export async function GET() {
 
     return NextResponse.json({ tasks: sanitized }, { status: 200 });
   } catch (err: any) {
-    console.error("🔥 TASK FETCH ERROR:", err);
     return NextResponse.json(
       { message: "Server error", error: err?.message },
       { status: 500 }

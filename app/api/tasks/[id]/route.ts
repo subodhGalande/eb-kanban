@@ -3,6 +3,7 @@ import prisma from "@/lib/db";
 import { cookies } from "next/headers";
 import { verifyToken } from "@/lib/jwt";
 
+//update task
 export async function PUT(
   req: Request,
   { params }: { params: Promise<{ id: string }> }
@@ -14,7 +15,6 @@ export async function PUT(
     const token = cookieStore.get("auth_token")?.value;
 
     if (!token) {
-      console.log("No token found");
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
 
@@ -61,6 +61,7 @@ export async function PUT(
   }
 }
 
+//delete task
 export async function DELETE(
   req: Request,
   { params }: { params: Promise<{ id: string }> }

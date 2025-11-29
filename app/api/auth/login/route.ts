@@ -6,7 +6,6 @@ import { signToken } from "@/lib/jwt";
 export async function POST(req: Request) {
   try {
     const { email, password } = await req.json();
-    console.log(email, password);
 
     const user = await prisma.user.findUnique({ where: { email } });
 
@@ -51,7 +50,6 @@ export async function POST(req: Request) {
 
     return res;
   } catch (err) {
-    console.log(err);
     return NextResponse.json({ message: " server error" }, { status: 500 });
   }
 }

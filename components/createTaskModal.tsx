@@ -41,13 +41,13 @@ export default function CreateTaskModal({ onCreate }: any) {
         setOpen(false);
       }
     } catch (err) {
-      console.error(err);
+      alert("Couldn't create task. Check your internet and try again.");
     }
   };
 
   return (
     <>
-      {/* Open modal button */}
+      {/* modal button */}
       <button
         onClick={() => {
           reset({ title: "", description: "", priority: "MEDIUM" });
@@ -66,7 +66,6 @@ export default function CreateTaskModal({ onCreate }: any) {
             <h2 className="text-xl font-semibold mb-4">New Task</h2>
 
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-              {/* Title */}
               <div>
                 <input
                   {...register("title")}
@@ -78,7 +77,6 @@ export default function CreateTaskModal({ onCreate }: any) {
                 )}
               </div>
 
-              {/* Description */}
               <div>
                 <textarea
                   {...register("description")}
@@ -92,7 +90,6 @@ export default function CreateTaskModal({ onCreate }: any) {
                 )}
               </div>
 
-              {/* Priority */}
               <div>
                 <select
                   {...register("priority")}
@@ -105,7 +102,6 @@ export default function CreateTaskModal({ onCreate }: any) {
                 </select>
               </div>
 
-              {/* Footer buttons */}
               <div className="flex justify-end gap-2">
                 <button
                   type="button"

@@ -60,15 +60,14 @@ export default function LoginPage() {
           </p>
         </div>
 
-        {/* Success Notification */}
         {successMsg && (
           <div className="w-full mb-4 p-3 bg-green-100 border border-green-300 text-green-700 rounded-lg text-sm text-center">
             {successMsg}
           </div>
         )}
 
+        {/* login form */}
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          {/* Email */}
           <div>
             <input
               {...register("email")}
@@ -80,7 +79,6 @@ export default function LoginPage() {
             )}
           </div>
 
-          {/* Password */}
           <div>
             <input
               type="password"
@@ -95,12 +93,11 @@ export default function LoginPage() {
             )}
           </div>
 
-          {/* Server Errors */}
+          {/* Server sent errors */}
           {serverError && (
             <p className="text-danger text-sm text-center">{serverError}</p>
           )}
 
-          {/* Submit Button */}
           <button
             type="submit"
             disabled={loading}
@@ -113,8 +110,7 @@ export default function LoginPage() {
           </button>
         </form>
 
-        {/* Signup link */}
-        <p className="text-center font-sans text-sm text-gray-600 mt-4">
+        <p className="text-center font-sans text-sm text-text mt-4">
           Don't have an account?{" "}
           <Link
             href="/signup"

@@ -57,7 +57,7 @@ export default function TaskCard({ task, onEdit, onDelete }: any) {
           </div>
         </div>
 
-        {/* Menu */}
+        {/* Three dot menu */}
         <div className="relative" ref={menuRef}>
           <button
             onClick={(e) => {
@@ -69,10 +69,12 @@ export default function TaskCard({ task, onEdit, onDelete }: any) {
             ⋯
           </button>
 
+          {/* edit and delete button */}
           {openMenu && (
             <div className="absolute right-0 mt-1 w-32 bg-white rounded-lg shadow-xl z-30">
               <button
                 onClick={(e) => {
+                  // stopping the event propagation to the parent - the whole card is drag handler
                   e.stopPropagation();
                   setOpenMenu(false);
                   onEdit(task);

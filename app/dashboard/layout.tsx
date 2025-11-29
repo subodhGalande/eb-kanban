@@ -32,19 +32,21 @@ export default async function DashboardLayout({
   if (!user) {
     redirect("/login", RedirectType.replace);
   }
-
+  //logic for randomized color in avatar
   const colors = ["#595762", "#899499", "#f0f0f5", "#eaa74e", "#db6060"];
   const avatarColor = colors[user.name.length % colors.length];
 
   return (
     <div className="min-h-screen flex flex-col justify-between font-sans  bg-white">
       <header className="w-full bg-white border-b border-b-text/25 px-4 py-2 md:px-8 flex flex-row items-center justify-between gap-3 shadow-sm">
-        <LogoutButton />
         <div className="flex  items-center justify-end gap-2 w-fit md:w-auto">
-          <span className="text-sm font-medium text-heading">{user.name}</span>
-
           <UserMenu name={user.name} avatarColor={avatarColor} />
+          <span className="text-base font-medium text-heading">
+            {" "}
+            Hi, <span className="font-semibold">{user.name}</span>
+          </span>
         </div>
+        <LogoutButton />
       </header>
 
       <main className="flex-1 w-full px-4 py-6 md:px-6 lg:px-10">

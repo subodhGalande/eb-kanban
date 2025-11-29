@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import axios from "axios";
@@ -62,15 +61,14 @@ export default function SignupPage() {
           </p>
         </div>
 
-        {/* Success Notification */}
         {successMsg && (
           <div className="w-full mb-4 p-3 bg-green-100 border border-green-300 text-green-700 rounded-lg text-sm text-center">
             {successMsg}
           </div>
         )}
 
+        {/* signup form */}
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          {/* Name */}
           <div>
             <input
               {...register("name")}
@@ -82,7 +80,6 @@ export default function SignupPage() {
             )}
           </div>
 
-          {/* Email */}
           <div>
             <input
               {...register("email")}
@@ -94,7 +91,6 @@ export default function SignupPage() {
             )}
           </div>
 
-          {/* Password */}
           <div>
             <input
               type="password"
@@ -109,12 +105,11 @@ export default function SignupPage() {
             )}
           </div>
 
-          {/* Server Errors */}
+          {/* Server sent errors */}
           {serverError && (
             <p className="text-danger text-sm text-center">{serverError}</p>
           )}
 
-          {/* Submit Button */}
           <button
             type="submit"
             disabled={loading}
@@ -127,8 +122,7 @@ export default function SignupPage() {
           </button>
         </form>
 
-        {/* Login link */}
-        <p className="text-center font-sans text-sm text-gray-600 mt-4">
+        <p className="text-center font-sans text-sm text-text mt-4">
           Already have an account?{" "}
           <Link
             href="/login"
